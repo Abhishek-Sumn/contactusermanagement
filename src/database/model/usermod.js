@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false,
+
     },
     isAdmin: {
         type: Boolean,
@@ -37,10 +38,8 @@ const userSchema = new mongoose.Schema({
         type: Date,
         required: false,
     },
-    tokenforgotPassword: String,
-    tokenforgotPasswordExpiry: Date,
-    veryToken: String,
-    verifyTokenExpiry: String
+    verifyToken: {type: String},
+    verifyTokenExpiry: {type: Date}
 
 })
 

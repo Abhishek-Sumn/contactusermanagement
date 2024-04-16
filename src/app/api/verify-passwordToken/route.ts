@@ -10,7 +10,6 @@ export const POST = async (request: any) => {
     await connect();
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    console.log(hashedToken)
     const user = await User.findOne({
         resetToken: hashedToken,
         resetTokenExpiry: { $gt: Date.now() }

@@ -23,7 +23,7 @@ export default function Resetpassword({ params }: any) {
     const verifyToken = async () => {
 
       try {
-        const res = await fetch("/api/verify-password", {
+        const res = await fetch("/api/verify-passwordToken", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -71,6 +71,7 @@ export default function Resetpassword({ params }: any) {
            "Content-Type": "application/json"
          },
          body: JSON.stringify({
+          //@ts-ignore
            email:user?.email,
            password 
          })

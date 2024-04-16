@@ -14,16 +14,16 @@ export const POST = async (request: any) => {
 
     const existinguser = await User.findOne({ email });
     if (!existinguser) {
-        return new NextResponse("Email not registered", { status: 400 })
+        return new NextResponse("Email not registered", { status: 408 })
     }
 
-    const resetToken = crypto.randomBytes(20).toString('hex');
-    const passwordresetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    const passWordResetExpiry = Date.now() + 3600000;
+    const token = crypto.randomBytes(20).toString('hex');
+    const verifyToken = crypto.createHash("sha256").update(token).digest("hex");
+    const verifyTokenExpiry = Date.now() + 3600000;
 
-    existinguser.resetToken = passwordresetToken;
-    existinguser.resetTokenExpiry = passWordResetExpiry;
-    const resetUrl = `localhost:3000/reset-password/${resetToken}`;
+    existinguser.verifyToken = verifyToken;
+    existinguser.verifyTokenExpiry = verifyTokenExpiry;
+    const resetUrl = `localhost:3000/verify-user/${token}`;
 
     //console.log(resetUrl);
 
@@ -44,7 +44,7 @@ export const POST = async (request: any) => {
         try {
             await transporter.sendMail({
                 ...mailOptions,
-                subject: "Reset Password",
+                subject: "Verify email",
                 text: resetUrl,
                 html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -264,7 +264,7 @@ export const POST = async (request: any) => {
                       <td style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 30px;font-family:'Lato',sans-serif;" align="left">
                         
                   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">Please reset your password </span></p>
+                    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">Please verify your email </span></p>
                   </div>
                 
                       </td>
@@ -303,9 +303,9 @@ export const POST = async (request: any) => {
                   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
                     <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Hello,</span></p>
                 <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-                <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">We have sent you this email in response to your request to reset your password <b>Contact wise</b>.</span></p>
+                <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">We have sent you this email in response to get your email verified <b>Contact wise</b>.</span></p>
                 <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-                <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">To reset your password, please follow the link below: </span></p>
+                <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">To verify email, please follow the link below: </span></p>
                   </div>
                 
                       </td>
@@ -322,7 +322,7 @@ export const POST = async (request: any) => {
                 <div align="left">
                   <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:51px; v-text-anchor:middle; width:205px;" arcsize="2%"  stroke="f" fillcolor="#18163a"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
                     <a href="www.google.com/${resetUrl}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #18163a; border-radius: 1px;-webkit-border-radius: 1px; -moz-border-radius: 1px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-                      <span style="display:block;padding:15px 40px;line-height:120%;"><span style="font-size: 18px; line-height: 21.6px;">Reset Password</span></span>
+                      <span style="display:block;padding:15px 40px;line-height:120%;"><span style="font-size: 18px; line-height: 21.6px;">Verify email</span></span>
                     </a>
                     <!--[if mso]></center></v:roundrect><![endif]-->
                 </div>
@@ -338,7 +338,7 @@ export const POST = async (request: any) => {
                       <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;" align="left">
                         
                   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                    <p style="font-size: 14px; line-height: 140%;"><span style="color: #888888; font-size: 14px; line-height: 19.6px;"><em><span style="font-size: 16px; line-height: 22.4px;">Please ignore this email if you did not request a password change.</span></em></span><br /><span style="color: #888888; font-size: 14px; line-height: 19.6px;"><em><span style="font-size: 16px; line-height: 22.4px;">&nbsp;</span></em></span></p>
+                    <p style="font-size: 14px; line-height: 140%;"><span style="color: #888888; font-size: 14px; line-height: 19.6px;"><em><span style="font-size: 16px; line-height: 22.4px;">Please ignore this email if you did not request a verification.</span></em></span><br /><span style="color: #888888; font-size: 14px; line-height: 19.6px;"><em><span style="font-size: 16px; line-height: 22.4px;">&nbsp;</span></em></span></p>
                   </div>
                 
                       </td>
@@ -463,7 +463,7 @@ export const POST = async (request: any) => {
 
     try {
         await existinguser.save();
-        return new NextResponse("Reset email sent", { status: 200 })
+        return new NextResponse("Verify email sent", { status: 200 })
     } catch (error: any) {
         return new NextResponse(error, { status: 500 })
     }

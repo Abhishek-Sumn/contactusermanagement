@@ -6,8 +6,8 @@ import { cn } from "../../../utils/cn"
 import { IconBrandGithub, IconBrandGoogle, } from "@tabler/icons-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
+
 import { toast } from 'sonner';
 import Link from "next/link";
 

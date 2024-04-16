@@ -54,6 +54,7 @@ export const authOptions: any = {
           if (!existingUser) {
             const newUser = new User({
               email: user.email,
+              isVerified:true,
               resetToken:"",
               resetTokenExpiry:""
             });
