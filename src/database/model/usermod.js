@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
-        required: [true, "Provide Your Name please"],
+        required: [false, "Provide Your Name please"],
         unique: false
     },
     lastname: {
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Provide Your Password please"],
+        required: [false, "Provide Your Password please"],
     },
     isVerified: {
         type: Boolean,
@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false,
+    },
+    resetToken :{
+        type: String,
+        required: false,
+    },
+    resetTokenExpiry :{
+        type: Date,
+        required: false,
     },
     tokenforgotPassword: String,
     tokenforgotPasswordExpiry: Date,

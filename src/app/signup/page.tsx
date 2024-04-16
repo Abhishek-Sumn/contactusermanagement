@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "../../../utils/cn"
 import { IconBrandGithub, IconBrandGoogle, } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
+import { signIn,useSession } from "next-auth/react";
+import { toast } from 'sonner';
 export default function SignupFormDemo() {
 
   const router = useRouter();
@@ -18,13 +19,22 @@ export default function SignupFormDemo() {
     password: "",
   })
 
+  const { data: session, status: sessionStatus } = useSession();
+
   const onClickSignup = async () => {
 
     try {
       const response = await axios.post("/api/users/signup", user);
       console.log("Signup Success", response.data);
       router.push("/login");
+      if (response.data.success) {
+        return toast.success("Account Successfully Created")
+      }
+
     } catch (error: any) {
+      if (error.response.status === 400) {
+        return toast.error("Email already exist")
+      }
       console.log(error)
     }
 
@@ -36,8 +46,14 @@ export default function SignupFormDemo() {
     e.preventDefault();
     console.log(user);
   };
+  useEffect(() => {
+    if (sessionStatus === "authenticated") {
+      router.replace("/userprofile");
+    }
+  }, [sessionStatus, router]);
 
   return (
+
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
         Welcome to ContactWise
@@ -82,7 +98,7 @@ export default function SignupFormDemo() {
         <div className="flex flex-col space-y-4">
           <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
+            onClick={() => { signIn("github") }}
           >
             <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-neutral-700 dark:text-neutral-300 text-sm">
