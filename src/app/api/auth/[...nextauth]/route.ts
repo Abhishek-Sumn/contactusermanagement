@@ -8,7 +8,7 @@ import User from "@/database/model/usermod";
 import { GithubProfile } from 'next-auth/providers/github';
 
 
-export const authOptions: any = {
+ const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -103,5 +103,5 @@ export const authOptions: any = {
   },
 };
 
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
