@@ -30,16 +30,17 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    resetToken :{
+    resetToken: {
         type: String,
         required: false,
     },
-    resetTokenExpiry :{
+    resetTokenExpiry: {
         type: Date,
         required: false,
     },
-    verifyToken: {type: String},
-    verifyTokenExpiry: {type: Date}
+    role: { type: String, enum: ['admin', 'user','manager'], default: 'user' },
+    verifyToken: { type: String },
+    verifyTokenExpiry: { type: Date }
 
 })
 

@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+const svgToDataUri = require("mini-svg-data-uri");
 //const flattenColorPalette = import('tailwindcss');
 
 const colors = require("tailwindcss/colors");
@@ -40,7 +40,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [addVariablesForColors,require("tailwindcss/lib/util/flattenColorPalette"),require("tailwindcss/colors"), require("tailwindcss/defaultTheme")],
+  plugins: [addVariablesForColors,require("tailwindcss/lib/util/flattenColorPalette"),require("tailwindcss/colors"), require("tailwindcss/defaultTheme"),
+  
+  ],
 };
 
 function addVariablesForColors({ addBase, theme }: any) {

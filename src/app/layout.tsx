@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth";
 import AuthProvider from "../../utils/SessionProvider";
 import { Toaster } from 'sonner';
 
+
 export const metadata: Metadata = {
   title: "ContactWise",
   description: "Developed By Abhishek Suman",
@@ -26,10 +27,12 @@ export default async function RootLayout({
 
         <AuthProvider session={session}>
           <Navbar />
+          <div className="mt-[5vh]">
           {children}
+          </div>
           <Toaster position="top-center" richColors />
         </AuthProvider>
-
+        
       </body>
     </html>
   );

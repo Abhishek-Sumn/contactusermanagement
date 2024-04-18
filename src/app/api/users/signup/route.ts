@@ -19,18 +19,19 @@ export async function POST(request: NextRequest) {
         // Hashing password using bcryptjs
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
-
+      
         // Create new user instance
         const newUser = new User({
             firstname,
             lastname,
             email,
+            role:'user',
             password: hashedPassword
         });
 
         // Save the new user
         const savedUser = await newUser.save();
-        console.log("User Created Successfully:", savedUser);
+        //console.log("User Created Successfully:", savedUser);
 
         // Respond with success message and user details
         return NextResponse.json({
@@ -39,7 +40,7 @@ export async function POST(request: NextRequest) {
             savedUser
         });
 
-    } catch (error:any) {
+    } catch (error: any) {
         // Handle any errors
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
