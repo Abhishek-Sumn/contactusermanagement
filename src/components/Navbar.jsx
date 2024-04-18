@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
+
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const handleSignout = () => {
     signOut();
+    router.refresh()
+    router.replace("/")
   };
 
   return (

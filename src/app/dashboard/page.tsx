@@ -3,20 +3,29 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner';
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { IconH1 } from '@tabler/icons-react';
 
 const Dashboard = () => {
 
+  const[loading,setLoading] = useState(true);
+
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
-  if (sessionStatus !== "authenticated") {
-    router.replace("/");
-    return toast.error('You are not logged in')
-  }
+
+  useEffect(() => {
+    if (sessionStatus === "loading") {
+      router.replace("/dashboard");
+    }
+    else if(sessionStatus != "authenticated"){
+      router.replace("/");
+    }
+    setLoading(false)
+  }, []);
 
   const [error, setError] = useState("");
   const [verified, setVerified] = useState(false);
+
   useEffect(() => {
-    
     const verifyEmail = async () => {
       try {
         const res = await fetch("/api/check-verification", {
@@ -43,13 +52,14 @@ const Dashboard = () => {
         console.log(error)
       }
     }
-
+    setLoading(false)
     verifyEmail();
-  }, [])
+  }, [sessionStatus])
 
   return (
     <div className='flex items-center justify-center h-[90vh]'>
-      {verified ? (<h1>Dashboard</h1>) : (<>Please verify your email from profile section to continue</>) }
+      {loading ? (<>Loading</>) : (verified ? (<h1>Dashboard</h1>) : (<>If you are logged in please verify your email</>))}
+   
     </div>
   )
 }
