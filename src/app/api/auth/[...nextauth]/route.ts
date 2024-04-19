@@ -56,7 +56,7 @@ import { GithubProfile } from 'next-auth/providers/github';
   callbacks: {
     async signIn({ user, account }: { user: AuthUser; account: Account }) {
       if (account?.provider == "credentials") {
-        console.log(user)
+        
         return user;
       }
       if (account?.provider == "github") {

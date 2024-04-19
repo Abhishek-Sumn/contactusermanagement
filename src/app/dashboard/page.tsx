@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner';
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { IconH1 } from '@tabler/icons-react';
+import Predashboard from "../../components/Predashboard";
 
 const Dashboard = () => {
 
@@ -58,10 +58,12 @@ const Dashboard = () => {
 
   return (
     <div className='flex items-center justify-center h-[90vh]'>
-      {loading ? (<>Loading</>) : (verified ? (<h1>Dashboard</h1>) : (<>If you are logged in please verify your email</>))}
+      {loading ? (<>Loading</>) : (verified ? (<Predashboard/>) : (<>If you are logged in please verify your email</>))}
    
     </div>
   )
 }
+
+
 
 export default Dashboard

@@ -4,22 +4,22 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
+import Admin from "@/app/Admin/page";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const handleSignout = () => {
     signOut();
-    router.refresh()
-    router.replace("/")
+    router.refresh();
+    router.replace("/");
   };
 
   return (
     <>
-   {/*    <div className="p-2 navgrad ">
+      {/*    <div className="p-2 navgrad ">
         <ul className="flex justify-between">
           <div>
             <Link href="/">Home</Link>
@@ -81,8 +81,11 @@ const Navbar = () => {
             </>
           ) : (
             <>
+              <Link href="/Admin">Admin</Link>
               <Link href="/dashboard">Dashboard</Link>
-              <Link href="/userprofile">{session.user?.name || session.user?.email}</Link>
+              <Link href="/userprofile">
+                {session.user?.name || session.user?.email}
+              </Link>
               <li>
                 <button onClick={handleSignout}>Logout</button>
               </li>
