@@ -12,9 +12,7 @@ const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const handleSignout = () => {
-    signOut();
-    router.refresh();
-    router.replace("/");
+    signOut({ callbackUrl: 'http://localhost:3000/' });
   };
 
   return (
@@ -92,7 +90,7 @@ const Navbar = () => {
             </>
           )}
 
-          <MenuIcon className="md:hidden" />
+         
         </aside>
       </header>
     </>

@@ -4,10 +4,11 @@ import { toast } from 'sonner';
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Predashboard from "../../components/Predashboard";
+import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 
 const Dashboard = () => {
 
-  const[loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
@@ -16,7 +17,7 @@ const Dashboard = () => {
     if (sessionStatus === "loading") {
       router.replace("/dashboard");
     }
-    else if(sessionStatus != "authenticated"){
+    else if (sessionStatus != "authenticated") {
       router.replace("/");
     }
     setLoading(false)
@@ -58,8 +59,9 @@ const Dashboard = () => {
 
   return (
     <div className='flex items-center justify-center h-[90vh]'>
-      {loading ? (<>Loading</>) : (verified ? (<Predashboard/>) : (<>If you are logged in please verify your email</>))}
-   
+      {loading ? (<>Loading</>) : (verified ? (<Predashboard />) : (<TextGenerateEffect words='If you are logged in please verify your email first' />))}
+
+
     </div>
   )
 }

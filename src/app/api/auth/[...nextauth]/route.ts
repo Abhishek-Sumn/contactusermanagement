@@ -6,9 +6,12 @@ import { Account, User as AuthUser } from "next-auth";
 import { connect } from "@/database/database.config";
 import User from "@/database/model/usermod";
 import { GithubProfile } from 'next-auth/providers/github';
+import GoogleProvider from "next-auth/providers/google";
 
+const GOOGLE_ID = process.env.GOOGLE_ID
+const GOOGLE_SECRET = process.env.GOOGLE_SECRET
 
- const authOptions: any = {
+const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -52,19 +55,35 @@ import { GithubProfile } from 'next-auth/providers/github';
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
 
+    GoogleProvider({
+      //@ts-ignore
+      profile(profile: GoogleProfile) {
+        return {
+          ...profile,
+          role: "user",
+          id: profile.picture,
+
+        }
+      },
+      clientId: GOOGLE_ID ?? "",
+      clientSecret: GOOGLE_SECRET ?? "",
+
+    }),
+
   ],
   callbacks: {
     async signIn({ user, account }: { user: AuthUser; account: Account }) {
       if (account?.provider == "credentials") {
-        
+
         return user;
       }
-      if (account?.provider == "github") {
+      if (account?.provider === "github") {
         await connect();
         try {
           const existingUser = await User.findOne({ email: user.email });
           if (!existingUser) {
             const newUser = new User({
+              firstname: user.name,
               email: user.email,
               isVerified: true,
               resetToken: "",
@@ -81,24 +100,46 @@ import { GithubProfile } from 'next-auth/providers/github';
           return false;
         }
       }
+      if (account?.provider === "google") {
+        await connect();
+        try {
+          const existingUser = await User.findOne({ email: user.email });
+          if (!existingUser) {
+            const newUser = new User({
+              firstname: user.name,
+              email: user.email,
+              isVerified: true,
+              resetToken: "",
+              resetTokenExpiry: "",
+              role: "user"
+            });
+
+            await newUser.save();
+            return true;
+          }
+          return true;
+        } catch (err) {
+          console.log("Error saving user", err);
+          return false;
+        }
+      }
     },
     //@ts-ignore
-    async jwt ({ token, user }) {
+    async jwt({ token, user }) {
       if (user?.role) token.role = user.role
       return token
     },
     //@ts-ignore
-    async session ({ session, token, user }) {
-        // user id is stored in ._id when using credentials provider
-        if (token?.role) session.user.role = token.role
-    
-        // user id is stored sub ._id when using google provider
-     
-        // we'll update the session object with those 
-        // informations besides the ones it already has
-        return session
+    async session({ session, token, user }) {
+      // user id is stored in ._id when using credentials provider
+      if (token?.role) session.user.role = token.role
+      // user id is stored sub ._id when using google provider
+
+      // we'll update the session object with those 
+      // informations besides the ones it already has
+      return session
     },
-   
+
 
   },
 };

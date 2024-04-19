@@ -43,7 +43,10 @@ export default function Login() {
         return toast.error("User not registered")
       }
       if (res.status === 200) {
-        router.push("/")
+        setTimeout(()=>{
+          router.push("/login")
+        },800)
+        return toast("Check your inbox for reset link")
       }
     }
     catch (error) {
