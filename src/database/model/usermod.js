@@ -39,11 +39,7 @@ const userSchema = new mongoose.Schema({
         required: false,
     },
     role: { type: String, enum: ['admin', 'user','manager'], default: 'user' },
-    tenant: {
-        type: String,
-        enum : ['IT','Sales','HR'],
-        default: 'Sales'
-    },
+    organisation : [{ type : String  , default: 'CW'}],
     verifyToken: { type: String },
     verifyTokenExpiry: { type: Date }
 

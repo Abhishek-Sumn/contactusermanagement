@@ -109,7 +109,7 @@ const UserProfilebase = () => {
           </div>
         </div>
         <div className="flex flex-col items-center pb-10">
-          <img className="w-34 h-24 mb-3 rounded-full shadow-lg" src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg?w=740" alt="Bonnie image" />
+          <img className="w-34 h-24 mb-3 rounded-full shadow-lg" src={session?.user?.image || "https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg?w=740"} alt="Bonnie image" />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{session?.user?.email}</h5>
           
           <span className="text-sm text-gray-500 dark:text-gray-400">Level - {session?.user?.role}</span>
@@ -125,6 +125,9 @@ const UserProfilebase = () => {
                     <div className="relative flex space-x-2 items-center z-10 rounded-full bg-zinc-950 py-0.5 px-4 ring-1 ring-white/10 ">
                       <span className='text-xl'>
                         Verified
+                      </span>
+                      <span className='text-xl'>
+                        {console.log(session.user)}
                       </span>
                       <svg
                         fill="none"

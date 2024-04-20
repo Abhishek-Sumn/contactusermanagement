@@ -88,6 +88,7 @@ const authOptions: any = {
               isVerified: true,
               resetToken: "",
               resetTokenExpiry: "",
+              organisation:["CW"],
               role: "admin"
             });
 
@@ -111,9 +112,10 @@ const authOptions: any = {
               isVerified: true,
               resetToken: "",
               resetTokenExpiry: "",
+              organisation:["CW"],
               role: "user"
             });
-
+            {console.log(user)}
             await newUser.save();
             return true;
           }
@@ -126,13 +128,19 @@ const authOptions: any = {
     },
     //@ts-ignore
     async jwt({ token, user }) {
+    //  console.log(user)
       if (user?.role) token.role = user.role
+      if(user?.organisation) token.organisation = user.organisation
+      if(user?.picture) token.image = user.picture
       return token
     },
     //@ts-ignore
     async session({ session, token, user }) {
       // user id is stored in ._id when using credentials provider
       if (token?.role) session.user.role = token.role
+      if (token?.organisation) session.user.organisation = token.organisation
+      if (token?.image) session.user.image = token.image
+
       // user id is stored sub ._id when using google provider
 
       // we'll update the session object with those 

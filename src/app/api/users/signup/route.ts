@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
             lastname,
             email,
             role:'user',
-            password: hashedPassword
+            password: hashedPassword,
+            organisation:["CW"],
         });
 
         // Save the new user
