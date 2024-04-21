@@ -64,7 +64,7 @@ export default function SignupFormDemo() {
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
             <Label htmlFor="firstname">First name</Label>
-            <Input id="firstname" placeholder="Abhishek" type="text" value={user.firstname}
+            <Input id="firstname" placeholder="Abhishek" type="text" value={user.firstname} required
               onChange={(e) => setUser({ ...user, firstname: e.target.value })}
             />
           </LabelInputContainer>
@@ -76,7 +76,7 @@ export default function SignupFormDemo() {
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@google.com" type="email" value={user.email}
+          <Input id="email" placeholder="projectmayhem@google.com" type="email" value={user.email} required
             onChange={(e) => setUser({ ...user, email: e.target.value })} />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
@@ -107,7 +107,7 @@ export default function SignupFormDemo() {
             </span>
             <BottomGradient />
           </button>
-          <button
+         {/*  <button
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"
             onClick={() => { signIn("google") }}
@@ -117,7 +117,7 @@ export default function SignupFormDemo() {
               Google
             </span>
             <BottomGradient />
-          </button>
+          </button> */}
 
         </div>
       </form>

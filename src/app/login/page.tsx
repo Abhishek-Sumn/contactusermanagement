@@ -99,7 +99,7 @@ export default function Login() {
               </span>
               <BottomGradient />
             </button>
-            <button
+         {/*    <button
               className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
               onClick={() => { signIn("google") }}
             >
@@ -108,7 +108,7 @@ export default function Login() {
                 Google
               </span>
               <BottomGradient />
-            </button>
+            </button> */}
 
           </div>
         </form>
