@@ -26,7 +26,7 @@ export const POST = async (request: any) => {
 
     existinguser.resetToken = passwordresetToken;
     existinguser.resetTokenExpiry = passWordResetExpiry;
-    const resetUrl = `https://contactwiseuser.vercel.app/reset-password/${resetToken}`;
+    const resetUrl = `reset-password/${resetToken}`;
 
     //console.log(resetUrl);
 

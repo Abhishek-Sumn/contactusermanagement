@@ -27,7 +27,7 @@ export const POST = async (request: any) => {
     existinguser.verifyToken = verifyToken;
     existinguser.verifyTokenExpiry = verifyTokenExpiry;
     //create URL to send on email
-    const resetUrl = `https://contactwiseuser.vercel.app/verify-user/${token}`;
+    const resetUrl = `verify-user/${token}`;
 
     //console.log(resetUrl);
 
