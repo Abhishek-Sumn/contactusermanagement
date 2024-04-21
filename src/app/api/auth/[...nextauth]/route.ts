@@ -126,6 +126,7 @@ const authOptions: any = {
         }
       }
     },
+    //jwt to pass more information into session that we can access in frontend
     //@ts-ignore
     async jwt({ token, user }) {
     //  console.log(user)

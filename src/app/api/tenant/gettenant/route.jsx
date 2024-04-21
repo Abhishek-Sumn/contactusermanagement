@@ -2,6 +2,8 @@ import Tenant from "@/database/model/tenantmod";
 import { connect } from "@/database/database.config";
 import { NextResponse } from "next/server";
 
+//get all the tenant and perform CRUD
+
 export async function GET() {
   await connect();
   let allTenant = {};

@@ -2,6 +2,8 @@ import User from "@/database/model/usermod";
 import { connect } from "@/database/database.config";
 import { NextResponse } from "next/server";
 
+//Fetch all the users from DB
+
 export async function GET() {
   await connect();
   let allUsers = {};
@@ -14,6 +16,7 @@ export async function GET() {
   }
 }
 
+//Identify user by email and then deleteing 
 export const DELETE = async (request) => {
   await connect();
   try {

@@ -3,7 +3,7 @@ import { connect } from "@/database/database.config";
 import { NextResponse } from "next/server";
 import crypto from "crypto"
 
-
+//get token from frontend verify
 
 export const POST = async (request: any) => {
     const { token } = await request.json();

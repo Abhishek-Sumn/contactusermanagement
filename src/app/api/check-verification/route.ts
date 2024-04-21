@@ -2,6 +2,8 @@ import User from "@/database/model/usermod";
 import { connect } from "@/database/database.config";
 import { NextResponse } from "next/server";
 
+//using email to find user then checking if user is verified or not
+
 export const POST = async (request: any) => {
     const { email } = await request.json();
     await connect();

@@ -12,18 +12,21 @@ export const POST = async (request: any) => {
     const { email } = await request.json();
     await connect();
 
+    //checking if user exists or not
+
     const existinguser = await User.findOne({ email });
     if (!existinguser) {
         return new NextResponse("Email not registered", { status: 400 })
     }
 
+    //creating token to send on email and storing on DB so when needed we can compare both 
     const resetToken = crypto.randomBytes(20).toString('hex');
     const passwordresetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
     const passWordResetExpiry = Date.now() + 3600000;
 
     existinguser.resetToken = passwordresetToken;
     existinguser.resetTokenExpiry = passWordResetExpiry;
-    const resetUrl = `localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `https://contactwiseuser.vercel.app/reset-password/${resetToken}`;
 
     //console.log(resetUrl);
 
@@ -40,6 +43,7 @@ export const POST = async (request: any) => {
         to: email
     }
 
+    //email body with custom HTML
     const sendmail = async () => {
         try {
             await transporter.sendMail({
@@ -321,7 +325,7 @@ export const POST = async (request: any) => {
                   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
                 <div align="left">
                   <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:51px; v-text-anchor:middle; width:205px;" arcsize="2%"  stroke="f" fillcolor="#18163a"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-                    <a href="www.google.com/${resetUrl}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #18163a; border-radius: 1px;-webkit-border-radius: 1px; -moz-border-radius: 1px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+                    <a href="https://contactwiseuser.vercel.app/${resetUrl}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #18163a; border-radius: 1px;-webkit-border-radius: 1px; -moz-border-radius: 1px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
                       <span style="display:block;padding:15px 40px;line-height:120%;"><span style="font-size: 18px; line-height: 21.6px;">Reset Password</span></span>
                     </a>
                     <!--[if mso]></center></v:roundrect><![endif]-->
