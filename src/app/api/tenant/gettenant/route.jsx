@@ -2,27 +2,27 @@ import Tenant from "@/database/model/tenantmod";
 import { connect } from "@/database/database.config";
 import { NextResponse } from "next/server";
 
-export async function GET (){
+export async function GET() {
   await connect();
-  let allTenant = {}
+  let allTenant = {};
 
   try {
     allTenant = await Tenant.find();
-    return  NextResponse.json({result : allTenant});
+    return NextResponse.json({ result: allTenant });
   } catch (error) {
     return new NextResponse(error, { status: 500 });
   }
-};
+}
 
 export const POST = async (request) => {
   await connect();
-  const requestData = await request.json();
-  const org = new Tenant({
-    name: requestData.name,
-    description: requestData.description,
-  });
-
   try {
+    const requestData = await request.json();
+    const org = new Tenant({
+      name: requestData.name,
+      description: requestData.description,
+    });
+
     const savedTenant = await org.save();
     return NextResponse.json({
       message: "Tenant added",
@@ -36,12 +36,11 @@ export const POST = async (request) => {
 
 export const PUT = async (request) => {
   await connect();
-  const { name, description,updatedName } = await request.json();
-
-  const updatedTenant = await Tenant.findOne({ name });
-  console.log(updatedTenant);
-
   try {
+    const { name, description, updatedName } = await request.json();
+
+    const updatedTenant = await Tenant.findOne({ name });
+
     if (!updatedTenant) {
       return new NextResponse({ message: "Tenant not found" }, { status: 404 });
     }
@@ -50,6 +49,30 @@ export const PUT = async (request) => {
 
     updatedTenant.save();
     return new NextResponse(updatedTenant, { status: 200 });
+  } catch (error) {
+    return new NextResponse(error, { status: 500 });
+  }
+};
+
+export const DELETE = async (request) => {
+  await connect();
+  try {
+    const { getid } = await request.json();
+
+    const deletedTenant = await Tenant.findOneAndDelete({ name: getid });
+
+    if (!deletedTenant) {
+      return new NextResponse({ message: "Tenant not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      {
+        message: "Tenant deleted successfully",
+        success: true,
+        deletedTenant,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     return new NextResponse(error, { status: 500 });
   }
