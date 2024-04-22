@@ -17,37 +17,36 @@ export const POST = async (request: any) => {
   if (!existinguser) {
     return new NextResponse("Email not registered", { status: 408 })
   }
-
-  //create token and timer(expiry)
-  const token = crypto.randomBytes(20).toString('hex');
-  const verifyToken = crypto.createHash("sha256").update(token).digest("hex");
-  const verifyTokenExpiry = Date.now() + 3600000;
-
-  //update on DB
-  existinguser.verifyToken = verifyToken;
-  existinguser.verifyTokenExpiry = verifyTokenExpiry;
-  //create URL to send on email
-  const resetUrl = `verify-user/${token}`;
-
-  //console.log(resetUrl);
-
-  //create nodemail body
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: nodemail,
-      pass: nodepassword
-    }
-  })
-
-  const mailOptions = {
-    from: nodemail,
-    to: email
-  }
-
-
-  //@ts-ignore
   await new Promise((resolve, reject) => {
+
+    //create token and timer(expiry)
+    const token = crypto.randomBytes(20).toString('hex');
+    const verifyToken = crypto.createHash("sha256").update(token).digest("hex");
+    const verifyTokenExpiry = Date.now() + 3600000;
+    console.log(verifyToken)
+    //update on DB
+    existinguser.verifyToken = verifyToken;
+    existinguser.verifyTokenExpiry = verifyTokenExpiry;
+    //create URL to send on email
+    const resetUrl = `verify-user/${token}`;
+
+    //console.log(resetUrl);
+
+    //create nodemail body
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: nodemail,
+        pass: nodepassword
+      }
+    })
+
+    const mailOptions = {
+      from: nodemail,
+      to: email
+    }
+
+    //@ts-ignore
     const sendmail = async () => {
       try {
         await transporter.sendMail({
@@ -456,10 +455,10 @@ export const POST = async (request: any) => {
                   
                   </html>
                   `
-  
+
         })
         return new NextResponse("Email Sent", { status: 200 })
-  
+
       } catch (error) {
         existinguser.resetToken = undefined;
         existinguser.resetTokenExpiry = undefined;

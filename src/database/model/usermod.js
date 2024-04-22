@@ -40,8 +40,8 @@ const userSchema = new mongoose.Schema({
     },
     role: { type: String, enum: ['admin', 'user','manager'], default: 'user' },
     organisation : [{ type : String  , default: 'CW'}],
-    verifyToken: { type: String },
-    verifyTokenExpiry: { type: Date }
+    verifyToken: { type: String ,required: false,},
+    verifyTokenExpiry: { type: Date,required: false, }
 
 })
 

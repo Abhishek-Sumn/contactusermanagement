@@ -32,7 +32,7 @@ export default function Resetpassword({ params }: any) {
                         token: params.token,
                     })
                 })
-
+          
                 if (res.status === 400) {
                     setError("Token expired or invalid")
                     setVerified(true)
