@@ -27,6 +27,10 @@ export async function POST(request: NextRequest) {
             email,
             role:'user',
             password: hashedPassword,
+            resetToken: "",
+            resetTokenExpiry: "",
+            verifyToken:"",
+            verifyTokenExpiry:"",
             organisation:["CW"],
         });
 

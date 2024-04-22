@@ -88,6 +88,8 @@ const authOptions: any = {
               isVerified: true,
               resetToken: "",
               resetTokenExpiry: "",
+              verifyToken:"",
+              verifyTokenExpiry:"",
               organisation:["CW"],
               role: "admin"
             });
@@ -112,6 +114,8 @@ const authOptions: any = {
               isVerified: true,
               resetToken: "",
               resetTokenExpiry: "",
+              verifyToken:"",
+              verifyTokenExpiry:"",
               organisation:["CW"],
               role: "user"
             });
