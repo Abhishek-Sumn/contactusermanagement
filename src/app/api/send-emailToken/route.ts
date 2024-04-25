@@ -25,12 +25,13 @@ export const POST = async (request: any) => {
     const verifyTokenExpiry = Date.now() + 3600000;
     console.log(verifyToken)
     //update on DB
+
     existinguser.verifyToken = verifyToken;
     existinguser.verifyTokenExpiry = verifyTokenExpiry;
     //create URL to send on email
     const resetUrl = `verify-user/${token}`;
 
-    //console.log(resetUrl);
+    console.log(existinguser);
 
     //create nodemail body
     const transporter = nodemailer.createTransport({
@@ -467,14 +468,15 @@ export const POST = async (request: any) => {
       }
     }
     sendmail();
+
+    try {
+      existinguser.save();
+      return new NextResponse("Verify email sent", { status: 200 })
+    } catch (error: any) {
+      return new NextResponse(error, { status: 500 })
+    }
   })
 
-  try {
-    await existinguser.save();
-    return new NextResponse("Verify email sent", { status: 200 })
-  } catch (error: any) {
-    return new NextResponse(error, { status: 500 })
-  }
 
 }
 

@@ -10,14 +10,16 @@ import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import { toast } from 'sonner';
 import Link from "next/link";
+import { Span } from "next/dist/trace";
 
 export default function Login() {
 
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-
+  const [sendEmail,setsendEmail] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
+
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -39,13 +41,14 @@ export default function Login() {
           email,
         })
       })
-      if (res.status === 400) {
+      setsendEmail(true)
+      const responseData = await res.json();
+      console.log(responseData)
+      if (res.status == 400) {
         return toast.error("User not registered")
       }
-      if (res.status === 200) {
-        setTimeout(()=>{
-          router.push("/login")
-        },800)
+      if (res.status == 200) {
+        router.push("/login")
         return toast("Check your inbox for reset link")
       }
     }
@@ -64,7 +67,7 @@ export default function Login() {
         <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
           Forget Password
         </h2>
-
+        {sendEmail ? ( toast('Check Your inbox')) : (<></>)}
         <form className="my-8" onSubmit={handleSubmit}>
 
           <LabelInputContainer className="mb-4">

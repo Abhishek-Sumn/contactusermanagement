@@ -11,7 +11,7 @@ export const POST = async (request: any) => {
     const { email, password } = await request.json();
     await connect();
 
-    
+
     const resgisteredUser = await User.findOne({ email });
 
     const hashedPassword = await bcryptjs.hash(password, 5);
@@ -19,13 +19,13 @@ export const POST = async (request: any) => {
     resgisteredUser.resetToken = undefined;
     resgisteredUser.resetTokenExpiry = undefined;
 
+    await new Promise((resolve, reject) => {
+        try {
+            resgisteredUser.save();
+            return new NextResponse("Password Updated", { status: 200 })
 
-    try {
-        await resgisteredUser.save();
-        return new NextResponse("Password Updated", { status: 200 })
-
-    } catch (error: any) {
-        return new NextResponse(error, { status: 500 })
-    }
-
+        } catch (error: any) {
+            return new NextResponse(error, { status: 500 })
+        }
+    })
 }

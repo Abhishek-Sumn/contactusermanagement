@@ -15,13 +15,13 @@ export const POST = async (request: any) => {
     resgisteredUser.verifyToken = undefined;
     resgisteredUser.verifyTokenExpiry = undefined;
 
+    await new Promise((resolve, reject) => {
+        try {
+            resgisteredUser.save();
+            return new NextResponse("User Verified", { status: 200 })
 
-    try {
-        await resgisteredUser.save();
-        return new NextResponse("User Verified", { status: 200 })
-
-    } catch (error: any) {
-        return new NextResponse(error, { status: 500 })
-    }
-
+        } catch (error: any) {
+            return new NextResponse(error, { status: 500 })
+        }
+    })
 }

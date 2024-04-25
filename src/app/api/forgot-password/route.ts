@@ -9,16 +9,16 @@ const nodemail = process.env.EMAIL
 const nodepassword = process.env.EMAIL_PASS
 
 export const POST = async (request: any) => {
-    const { email } = await request.json();
-    await connect();
+  const { email } = await request.json();
+  await connect();
 
-    //checking if user exists or not
+  //checking if user exists or not
 
-    const existinguser = await User.findOne({ email });
-    if (!existinguser) {
-        return new NextResponse("Email not registered", { status: 400 })
-    }
-
+  const existinguser = await User.findOne({ email });
+  if (!existinguser) {
+    return new NextResponse("Email not registered", { status: 400 })
+  }
+  await new Promise((resolve, reject) => {
     //creating token to send on email and storing on DB so when needed we can compare both 
     const resetToken = crypto.randomBytes(20).toString('hex');
     const passwordresetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
@@ -31,27 +31,27 @@ export const POST = async (request: any) => {
     //console.log(resetUrl);
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: nodemail,
-            pass: nodepassword
-        }
+      service: 'gmail',
+      auth: {
+        user: nodemail,
+        pass: nodepassword
+      }
     })
 
     const mailOptions = {
-        from: nodemail,
-        to: email
+      from: nodemail,
+      to: email
     }
 
-    await new Promise((resolve, reject) => {
-      //email body with custom HTML
-      const sendmail = async () => {
-          try {
-              await transporter.sendMail({
-                  ...mailOptions,
-                  subject: "Reset Password",
-                  text: resetUrl,
-                  html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+    //email body with custom HTML
+    const sendmail = async () => {
+      try {
+        await transporter.sendMail({
+          ...mailOptions,
+          subject: "Reset Password",
+          text: resetUrl,
+          html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
                   <head>
                   
@@ -453,28 +453,29 @@ export const POST = async (request: any) => {
                   
                   </html>
                   `
-                  
-              })
-              return new NextResponse("Email Sent", { status: 200 })
-  
-          } catch (error) {
-              existinguser.resetToken = undefined;
-              existinguser.resetTokenExpiry = undefined;
-              console.log(error)
-              return new NextResponse("Something went wrong", { status: 401 })
-          }
-      }
-      sendmail();
-    
-    })
 
-    
-    try {
-        await existinguser.save();
-        return new NextResponse("Reset email sent", { status: 200 })
-    } catch (error: any) {
-        return new NextResponse(error, { status: 500 })
+        })
+        return new NextResponse("Email Sent", { status: 200 })
+
+      } catch (error) {
+        existinguser.resetToken = undefined;
+        existinguser.resetTokenExpiry = undefined;
+        console.log(error)
+        return new NextResponse("Something went wrong", { status: 401 })
+      }
     }
+    sendmail();
+
+
+
+
+    try {
+      existinguser.save();
+      return new NextResponse("Reset email sent", { status: 200 })
+    } catch (error: any) {
+      return new NextResponse(error, { status: 500 })
+    }
+  })
 
 }
 
